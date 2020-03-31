@@ -4,11 +4,7 @@ namespace library_webapi.Models
   {
     public string Name { get; set; }
     public string Location { get; set; }
-    public library(string name, string location)
-    {
-      Name = name;
-      Location = location;
-    }
+    public int Id { get; set; }
 
   }//endof class
 }//endof namespace

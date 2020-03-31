@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using library_webapi.Models;
+using library_webapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace library_webapi.Controllers
@@ -9,12 +10,19 @@ namespace library_webapi.Controllers
   [Route("api/[controller]")]
   public class MagazinesController : ControllerBase
   {
+    private readonly MagazineService _ms;
+    // NOTE Dependency Injection
+    public MagazinesController(MagazineService ms)
+    {
+      _ms = ms;
+    }
+
     [HttpGet]
     public ActionResult<IEnumerable<Magazine>> Get()
     {
       try
       {
-        return Ok(FakeDB.magazines);
+        return Ok(_ms.Get());
       }
       catch (Exception e)
       {
@@ -23,13 +31,11 @@ namespace library_webapi.Controllers
     }//endof Get
 
     [HttpGet("{magazineId}")]
-    public ActionResult<Magazine> GetByID(string magazineId)
+    public ActionResult<Magazine> GetByID(int magazineId)
     {
       try
       {
-        Magazine magazineFound = FakeDB.magazines.Find(b => b.Id == magazineId);
-        if (magazineFound == null) { throw new Exception("Invalid Id"); }
-        return Ok(magazineFound);
+        return Ok(_ms.Get(magazineId));
       }
       catch (Exception e)
       {
@@ -42,8 +48,7 @@ namespace library_webapi.Controllers
     {
       try
       {
-        FakeDB.magazines.Add(newMagazine);
-        return Created($"api/magazines/{newMagazine.Id}", newMagazine);
+        return Ok(_ms.Create(newMagazine));
       }
       catch (Exception e)
       {
@@ -52,16 +57,12 @@ namespace library_webapi.Controllers
     }//endof create
 
     [HttpPut("{magazineId}")]
-    public ActionResult<Magazine> Edit(string magazineId, [FromBody] Magazine updatedMagazine)
+    public ActionResult<Magazine> Edit(int magazineId, [FromBody] Magazine updatedMagazine)
     {
       try
       {
-        Magazine magazineToUpdate = FakeDB.magazines.Find(b => b.Id == magazineId);
-        if (magazineToUpdate == null) { throw new Exception("Invalid ID"); }
-        magazineToUpdate.Title = updatedMagazine.Title;
-        magazineToUpdate.Publisher = updatedMagazine.Publisher;
-        magazineToUpdate.Volume = updatedMagazine.Volume;
-        return Ok(magazineToUpdate);
+        updatedMagazine.Id = magazineId;
+        return Ok(updatedMagazine);
       }
       catch (Exception e)
       {
@@ -70,14 +71,14 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpPut("{magazineId}/checkout")]
-    public ActionResult<Magazine> Checkout(string magazineId)
+    public ActionResult<Magazine> Checkout(int magazineId)
     {
       try
       {
-        Magazine magazineToUpdate = FakeDB.magazines.Find(b => b.Id == magazineId);
-        if (magazineToUpdate == null) { throw new Exception("Invalid ID"); }
-        magazineToUpdate.Available = false;
-        return Ok(magazineToUpdate);
+        Magazine magazineToCheckout = _ms.Get(magazineId);
+        if (magazineToCheckout == null) { throw new Exception("Invalid ID"); }
+        magazineToCheckout.Available = false;
+        return Ok(_ms.CheckOut(magazineToCheckout));
       }
       catch (Exception e)
       {
@@ -86,14 +87,11 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpDelete("{magazineId}")]
-    public ActionResult<string> Delete(string magazineId)
+    public ActionResult<string> Delete(int magazineId)
     {
       try
       {
-        Magazine magazineToRemove = FakeDB.magazines.Find(b => b.Id == magazineId);
-        if (magazineToRemove == null) { throw new Exception("Invalid ID"); }
-        FakeDB.magazines.Remove(magazineToRemove);
-        return Ok("Successfully Deleted");
+        return Ok(_ms.Delete(magazineId));
       }
       catch (Exception e)
       {

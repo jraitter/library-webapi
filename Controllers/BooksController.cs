@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using library_webapi.Models;
+using library_webapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace library_webapi.Controllers
@@ -9,12 +10,19 @@ namespace library_webapi.Controllers
   [Route("api/[controller]")]
   public class BooksController : ControllerBase
   {
+    private readonly BookService _bs;
+    // NOTE Dependency Injection
+    public BooksController(BookService bs)
+    {
+      _bs = bs;
+    }
+
     [HttpGet]
     public ActionResult<IEnumerable<Book>> Get()
     {
       try
       {
-        return Ok(FakeDB.books);
+        return Ok(_bs.Get());
       }
       catch (Exception e)
       {
@@ -23,13 +31,11 @@ namespace library_webapi.Controllers
     }//endof Get
 
     [HttpGet("{bookId}")]
-    public ActionResult<Book> GetByID(string bookId)
+    public ActionResult<Book> GetByID(int bookId)
     {
       try
       {
-        Book bookFound = FakeDB.books.Find(b => b.Id == bookId);
-        if (bookFound == null) { throw new Exception("Invalid Id"); }
-        return Ok(bookFound);
+        return Ok(_bs.Get(bookId));
       }
       catch (Exception e)
       {
@@ -42,8 +48,7 @@ namespace library_webapi.Controllers
     {
       try
       {
-        FakeDB.books.Add(newBook);
-        return Created($"api/books/{newBook.Id}", newBook);
+        return Ok(_bs.Create(newBook));
       }
       catch (Exception e)
       {
@@ -52,15 +57,12 @@ namespace library_webapi.Controllers
     }//endof create
 
     [HttpPut("{bookId}")]
-    public ActionResult<Book> Edit(string bookId, [FromBody] Book updatedBook)
+    public ActionResult<Book> Edit(int bookId, [FromBody] Book updatedBook)
     {
       try
       {
-        Book bookToUpdate = FakeDB.books.Find(b => b.Id == bookId);
-        if (bookToUpdate == null) { throw new Exception("Invalid ID"); }
-        bookToUpdate.Title = updatedBook.Title;
-        bookToUpdate.Author = updatedBook.Author;
-        return Ok(bookToUpdate);
+        updatedBook.Id = bookId;
+        return Ok(updatedBook);
       }
       catch (Exception e)
       {
@@ -69,14 +71,14 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpPut("{bookId}/checkout")]
-    public ActionResult<Book> Checkout(string bookId)
+    public ActionResult<Book> Checkout(int bookId)
     {
       try
       {
-        Book bookToUpdate = FakeDB.books.Find(b => b.Id == bookId);
-        if (bookToUpdate == null) { throw new Exception("Invalid ID"); }
-        bookToUpdate.Available = false;
-        return Ok(bookToUpdate);
+        Book bookToCheckout = _bs.Get(bookId);
+        if (bookToCheckout == null) { throw new Exception("Invalid ID"); }
+        bookToCheckout.Available = false;
+        return Ok(_bs.CheckOut(bookToCheckout));
       }
       catch (Exception e)
       {
@@ -85,14 +87,11 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpDelete("{bookId}")]
-    public ActionResult<string> Delete(string bookId)
+    public ActionResult<string> Delete(int bookId)
     {
       try
       {
-        Book bookToRemove = FakeDB.books.Find(b => b.Id == bookId);
-        if (bookToRemove == null) { throw new Exception("Invalid ID"); }
-        FakeDB.books.Remove(bookToRemove);
-        return Ok("Successfully Deleted");
+        return Ok(_bs.Delete(bookId));
       }
       catch (Exception e)
       {
