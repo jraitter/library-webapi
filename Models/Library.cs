@@ -1,6 +1,6 @@
 namespace library_webapi.Models
 {
-  public class library
+  public class Library
   {
     public string Name { get; set; }
     public string Location { get; set; }

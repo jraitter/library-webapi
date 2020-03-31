@@ -84,7 +84,7 @@ namespace library_webapi.Controllers
       {
         return BadRequest(e.Message);
       }
-    }//endof edit
+    }//endof checkout
 
     [HttpDelete("{magazineId}")]
     public ActionResult<string> Delete(int magazineId)

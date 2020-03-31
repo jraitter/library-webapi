@@ -8,21 +8,21 @@ namespace library_webapi.Controllers
 {
   [ApiController]
   [Route("api/[controller]")]
-  public class BooksController : ControllerBase
+  public class LibrariesController : ControllerBase
   {
-    private readonly BookService _bs;
+    private readonly LibraryService _ls;
     // NOTE Dependency Injection
-    public BooksController(BookService bs)
+    public LibrariesController(LibraryService ls)
     {
-      _bs = bs;
+      _ls = ls;
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Book>> Get()
+    public ActionResult<IEnumerable<Library>> Get()
     {
       try
       {
-        return Ok(_bs.Get());
+        return Ok(_ls.Get());
       }
       catch (Exception e)
       {
@@ -31,11 +31,11 @@ namespace library_webapi.Controllers
     }//endof Get
 
     [HttpGet("{bookId}")]
-    public ActionResult<Book> GetByID(int bookId)
+    public ActionResult<Library> GetByID(int bookId)
     {
       try
       {
-        return Ok(_bs.Get(bookId));
+        return Ok(_ls.Get(bookId));
       }
       catch (Exception e)
       {
@@ -44,11 +44,11 @@ namespace library_webapi.Controllers
     }//endof GetByID
 
     [HttpPost]
-    public ActionResult<string> Create([FromBody] Book newBook)
+    public ActionResult<string> Create([FromBody] Library newLibrary)
     {
       try
       {
-        return Ok(_bs.Create(newBook));
+        return Ok(_ls.Create(newLibrary));
       }
       catch (Exception e)
       {
@@ -57,12 +57,12 @@ namespace library_webapi.Controllers
     }//endof create
 
     [HttpPut("{bookId}")]
-    public ActionResult<Book> Edit(int bookId, [FromBody] Book updatedBook)
+    public ActionResult<Library> Edit(int bookId, [FromBody] Library updatedLibrary)
     {
       try
       {
-        updatedBook.Id = bookId;
-        return Ok(updatedBook);
+        updatedLibrary.Id = bookId;
+        return Ok(updatedLibrary);
       }
       catch (Exception e)
       {
@@ -70,28 +70,12 @@ namespace library_webapi.Controllers
       }
     }//endof edit
 
-    [HttpPut("{bookId}/checkout")]
-    public ActionResult<Book> Checkout(int bookId)
-    {
-      try
-      {
-        Book bookToCheckout = _bs.Get(bookId);
-        if (bookToCheckout == null) { throw new Exception("Invalid ID"); }
-        bookToCheckout.Available = false;
-        return Ok(_bs.CheckOut(bookToCheckout));
-      }
-      catch (Exception e)
-      {
-        return BadRequest(e.Message);
-      }
-    }//endof checkout
-
     [HttpDelete("{bookId}")]
     public ActionResult<string> Delete(int bookId)
     {
       try
       {
-        return Ok(_bs.Delete(bookId));
+        return Ok(_ls.Delete(bookId));
       }
       catch (Exception e)
       {

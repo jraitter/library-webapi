@@ -38,6 +38,8 @@ namespace library_webapi
       services.AddTransient<BooksRepository>();
       services.AddTransient<MagazineService>();
       services.AddTransient<MagazinesRepository>();
+      services.AddTransient<LibraryService>();
+      services.AddTransient<LibrariesRepository>();
     }
     private IDbConnection CreateDbConnection()
     {
