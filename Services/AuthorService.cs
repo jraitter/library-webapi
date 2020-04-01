@@ -5,54 +5,45 @@ using library_webapi.Repositories;
 
 namespace library_webapi.Services
 {
-  public class BookService
+  public class AuthorService
   {
-    private readonly BooksRepository _repo;
-    public BookService(BooksRepository repo)
+    private readonly AuthorsRepository _repo;
+    public AuthorService(AuthorsRepository repo)
     {
       _repo = repo;
     }
-    public IEnumerable<Book> Get()
+    public IEnumerable<Author> Get()
     {
       return _repo.Get();
     }
-    public Book Get(int id)
+    public Author Get(int id)
     {
-      Book found = _repo.Get(id);
+      Author found = _repo.Get(id);
       if (found == null)
       {
         throw new Exception("Invalid Id");
       }
       return found;
     }
-    public Book Create(Book newBook)
+    public Author Create(Author newAuthor)
     {
-      return _repo.Create(newBook);
+      return _repo.Create(newAuthor);
     }
 
-    public Book Edit(Book updatedBook)
+    public Author Edit(Author updatedAuthor)
     {
-      Book exists = _repo.Get(updatedBook.Id);
+      Author exists = _repo.Get(updatedAuthor.Id);
       if (exists == null)
       {
         throw new Exception("Invalid Id");
       }
-      return _repo.Edit(updatedBook);
+      return _repo.Edit(updatedAuthor);
     }
 
-    public Book CheckOut(Book updatedBook)
-    {
-      Book exists = _repo.Get(updatedBook.Id);
-      if (exists == null)
-      {
-        throw new Exception("Invalid Id");
-      }
-      return _repo.CheckOutIn(updatedBook);
-    }
 
     public string Delete(int id)
     {
-      Book exists = _repo.Get(id);
+      Author exists = _repo.Get(id);
       if (exists == null)
       {
         throw new Exception("Invalid Id");

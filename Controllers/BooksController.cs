@@ -71,7 +71,7 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpPut("{bookId}/checkout")]
-    public ActionResult<Book> Checkout(int bookId)
+    public ActionResult<Book> CheckOut(int bookId)
     {
       try
       {
@@ -85,6 +85,22 @@ namespace library_webapi.Controllers
         return BadRequest(e.Message);
       }
     }//endof checkout
+
+    [HttpPut("{bookId}/checkin")]
+    public ActionResult<Book> CheckIn(int bookId)
+    {
+      try
+      {
+        Book bookToCheckin = _bs.Get(bookId);
+        if (bookToCheckin == null) { throw new Exception("Invalid ID"); }
+        bookToCheckin.Available = true;
+        return Ok(_bs.CheckOut(bookToCheckin));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }//endof checkin
 
     [HttpDelete("{bookId}")]
     public ActionResult<string> Delete(int bookId)

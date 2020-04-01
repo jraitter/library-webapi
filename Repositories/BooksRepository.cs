@@ -32,8 +32,8 @@ namespace library_webapi.Repositories
     public Book Create(Book newBook)
     {
       string sql = @"
-      INSERT INTO books (title, author, available)
-      VALUES (@Title, @Author, true);
+      INSERT INTO books (title, author, libId, available)
+      VALUES (@Title, @Author, @LibId, true);
       SELECT LAST_INSERT_ID();
       ";
       int id = _db.ExecuteScalar<int>(sql, newBook);
@@ -49,14 +49,15 @@ namespace library_webapi.Repositories
   UPDATE books SET
   title = @Title,
   author = @Author,
-  available = @Available
+  available = @Available,
+  libId = @LibId,
   WHERE id =@Id;
   ";
       _db.Execute(sql, updatedBook);
       return updatedBook;
     }
 
-    public Book CheckOut(Book updatedBook)
+    public Book CheckOutIn(Book updatedBook)
     {
       string sql = @"
   UPDATE books SET
