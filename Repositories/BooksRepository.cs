@@ -50,7 +50,7 @@ namespace library_webapi.Repositories
   title = @Title,
   author = @Author,
   available = @Available,
-  libId = @LibId,
+  libId = @LibId
   WHERE id =@Id;
   ";
       _db.Execute(sql, updatedBook);

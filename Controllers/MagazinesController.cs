@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using library_webapi.Models;
 using library_webapi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace library_webapi.Controllers
@@ -44,6 +45,8 @@ namespace library_webapi.Controllers
     }//endof GetByID
 
     [HttpPost]
+    [Authorize]
+
     public ActionResult<string> Create([FromBody] Magazine newMagazine)
     {
       try
@@ -57,12 +60,14 @@ namespace library_webapi.Controllers
     }//endof create
 
     [HttpPut("{magazineId}")]
+    [Authorize]
+
     public ActionResult<Magazine> Edit(int magazineId, [FromBody] Magazine updatedMagazine)
     {
       try
       {
         updatedMagazine.Id = magazineId;
-        return Ok(updatedMagazine);
+        return Ok(_ms.Edit(updatedMagazine));
       }
       catch (Exception e)
       {
@@ -71,6 +76,8 @@ namespace library_webapi.Controllers
     }//endof edit
 
     [HttpPut("{magazineId}/checkout")]
+    [Authorize]
+
     public ActionResult<Magazine> Checkout(int magazineId)
     {
       try
@@ -87,6 +94,8 @@ namespace library_webapi.Controllers
     }//endof checkout
 
     [HttpDelete("{magazineId}")]
+    [Authorize]
+
     public ActionResult<string> Delete(int magazineId)
     {
       try

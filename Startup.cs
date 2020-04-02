@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using library_webapi.Repositories;
 using library_webapi.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,11 +30,33 @@ namespace library_webapi
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddAuthentication(options =>
+{
+  options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+  options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+  options.Authority = $"https://{Configuration["Auth0:Domain"]}/";
+  options.Audience = Configuration["Auth0:Audience"];
+});
+      services.AddCors(options =>
+      {
+        options.AddPolicy("CorsDevPolicy", builder =>
+              {
+                builder
+                          .WithOrigins(new string[]{
+                         "http://localhost:8080", "http://localhost:8081"
+                      })
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials();
+              });
+      });
       services.AddControllers();
       // Connection to DB
       services.AddScoped<IDbConnection>(x => CreateDbConnection());
 
-      //Registering Transients for Debendency Injection
+      //Registering Transients for Dependency Injection
       services.AddTransient<BookService>();
       services.AddTransient<BooksRepository>();
       services.AddTransient<MagazineService>();
@@ -57,13 +80,19 @@ namespace library_webapi
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
+        app.UseCors("CorsDevPolicy");
       }
 
       app.UseHttpsRedirection();
 
       app.UseRouting();
 
+      app.UseAuthentication();
+
       app.UseAuthorization();
+
+      app.UseDefaultFiles();
+      app.UseStaticFiles();
 
       app.UseEndpoints(endpoints =>
       {

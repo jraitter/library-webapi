@@ -45,9 +45,13 @@
 
 
 -- NOTE Getting books by author id
--- SELECT b.* FROM bookAuthors ba
--- INNER JOIN books b ON b.id = ba.authId
--- WHERE authId = 1;
+-- SELECT * FROM bookAuthors ba
+-- INNER JOIN authors a ON a.id = ba.authId
+-- WHERE bookId = 1;
+
+-- SELECT * FROM bookAuthors ba
+-- INNER JOIN books b ON b.id = ba.bookId
+-- WHERE authId = 7;
 
 
 -- api/carts/1/shoes

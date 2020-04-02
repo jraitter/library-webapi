@@ -47,7 +47,7 @@ namespace library_webapi.Repositories
       string sql = @"
   UPDATE libraries SET
   name = @Name,
-  location = @Location,
+  location = @Location
   WHERE id =@Id;
   ";
       _db.Execute(sql, updatedLibrary);

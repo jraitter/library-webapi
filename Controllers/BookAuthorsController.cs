@@ -32,6 +32,7 @@ namespace library_webapi.Controllers
     }
 
     //delete
+    [HttpPut] // api/bookauthors/:bookAuthorId
     public ActionResult<BookAuthor> Delete([FromBody] BookAuthor toRemove)
     {
       try

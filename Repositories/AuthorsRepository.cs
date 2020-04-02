@@ -47,8 +47,8 @@ namespace library_webapi.Repositories
       string sql = @"
   UPDATE authors SET
   name = @Name,
-  publication = @Publication,
-  WHERE id =@Id;
+  publication = @Publication
+  WHERE id = @Id;
   ";
       _db.Execute(sql, updatedAuthor);
       return updatedAuthor;

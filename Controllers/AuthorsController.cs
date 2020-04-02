@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using library_webapi.Models;
 using library_webapi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace library_webapi.Controllers
@@ -30,12 +31,12 @@ namespace library_webapi.Controllers
       }
     }//endof Get
 
-    [HttpGet("{bookId}")]
-    public ActionResult<Author> GetByID(int bookId)
+    [HttpGet("{authorId}")]
+    public ActionResult<Author> GetByID(int authorId)
     {
       try
       {
-        return Ok(_as.Get(bookId));
+        return Ok(_as.Get(authorId));
       }
       catch (Exception e)
       {
@@ -44,6 +45,7 @@ namespace library_webapi.Controllers
     }//endof GetByID
 
     [HttpPost]
+    [Authorize]
     public ActionResult<string> Create([FromBody] Author newAuthor)
     {
       try
@@ -56,13 +58,14 @@ namespace library_webapi.Controllers
       }
     }//endof create
 
-    [HttpPut("{bookId}")]
-    public ActionResult<Author> Edit(int bookId, [FromBody] Author updatedAuthor)
+    [HttpPut("{authorId}")]
+    [Authorize]
+    public ActionResult<Author> Edit(int authorId, [FromBody] Author updatedAuthor)
     {
       try
       {
-        updatedAuthor.Id = bookId;
-        return Ok(updatedAuthor);
+        updatedAuthor.Id = authorId;
+        return Ok(_as.Edit(updatedAuthor));
       }
       catch (Exception e)
       {
@@ -70,12 +73,13 @@ namespace library_webapi.Controllers
       }
     }//endof edit
 
-    [HttpDelete("{bookId}")]
-    public ActionResult<string> Delete(int bookId)
+    [HttpDelete("{authorId}")]
+    [Authorize]
+    public ActionResult<string> Delete(int authorId)
     {
       try
       {
-        return Ok(_as.Delete(bookId));
+        return Ok(_as.Delete(authorId));
       }
       catch (Exception e)
       {
