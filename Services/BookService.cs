@@ -12,6 +12,10 @@ namespace library_webapi.Services
     {
       _repo = repo;
     }
+    public IEnumerable<Book> GetBooksByAuthId(int authId)
+    {
+      return _repo.GetBooksByAuthId(authId);
+    }
     public IEnumerable<Book> Get()
     {
       return _repo.Get();

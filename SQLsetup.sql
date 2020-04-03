@@ -55,3 +55,14 @@
 
 
 -- api/carts/1/shoes
+
+-- select * from bookauthors;
+
+-- NOTE these below work and are in code
+-- SELECT * FROM bookauthors ba
+-- INNER JOIN authors a ON a.id = ba.authId
+-- WHERE bookId = @ID;
+
+  -- SELECT b.* FROM bookauthors ba
+  -- INNER JOIN books b ON b.id = ba.bookId
+  -- WHERE authId = @Id;";

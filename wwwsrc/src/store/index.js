@@ -18,36 +18,52 @@ let api = Axios.create({
 export default new Vuex.Store({
   state: {
     profile: {},
-    publicBlogs: [],
-    myBlogs: []
+    books: [],
+    activeBook: [],
+    authors: [],
+    activeAuthor: []
   },
   mutations: {
     setProfile(state, profile) {
       state.profile = profile;
     },
-    setPublicBlogs(state, blogs) {
-      state.publicBlogs = blogs;
+    setBooks(state, books) {
+      state.books = books;
     },
-    setMyBlogs(state, data) {
-      state.myBlogs = data;
+    setAuthors(state, authors) {
+      state.authors = authors;
+    },
+    setActiveAuthor(state, author) {
+      state.activeAuthor = author;
+    },
+    setActiveBook(state, book) {
+      state.activeBook = book;
     }
   },
   actions: {
-    setBearer({}, bearer) {
+    setBearer({ }, bearer) {
       api.defaults.headers.authorization = bearer;
     },
     resetBearer() {
       api.defaults.headers.authorization = "";
     },
 
-    async getBlogs({ commit, dispatch }) {
-      let res = await api.get("blogs");
-      commit("setPublicBlogs", res.data);
+    async getBooks({ commit, dispatch }) {
+      let res = await api.get("books");
+      commit("setBooks", res.data);
     },
 
-    async getMyBlogs({ commit }) {
-      let res = await api.get("blogs/myBlogs");
-      commit("setMyBlogs", res.data);
+    async getAuthors({ commit }) {
+      let res = await api.get("authors");
+      commit("setAuthors", res.data);
+    },
+    async getCurrentAuthor({ commit }, id) {
+      let res = await api.get("books/" + id + "/authors");
+      commit("setActiveAuthor", res.data)
+    },
+    async getCurrentBook({ commit }, id) {
+      let res = await api.get("authors/" + id + "/books");
+      commit("setActiveBook", res.data)
     }
   }
 });

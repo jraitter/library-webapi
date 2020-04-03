@@ -2,7 +2,6 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
     <h1>Welcome to Your Vue.js App</h1>
-    {{ blogs }}
   </div>
 </template>
 
@@ -10,9 +9,12 @@
 export default {
   name: "home",
   computed: {
-    blogs() {
-      return this.$store.state.publicBlogs;
-    }
+    // books() {
+    //   return this.$store.state.books;
+    // },
+    // authors() {
+    //   return this.$store.state.authors;
+    // }
   }
 };
 </script>

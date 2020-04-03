@@ -62,5 +62,15 @@ namespace library_webapi.Repositories
       int changed = _db.Execute(sql, new { Id });
       return changed == 1;
     }
+    internal IEnumerable<Author> GetAuthorsByBookId(int Id)
+    {
+      string sql = @"
+            SELECT a.* FROM bookauthors ba
+            INNER JOIN authors a ON a.id = ba.authId
+            WHERE bookId = @Id;";
+      return _db.Query<Author>(sql, new { Id });
+    }
+
+
   }//endof class
 }//endof namespace

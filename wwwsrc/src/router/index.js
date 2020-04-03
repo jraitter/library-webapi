@@ -5,6 +5,8 @@ import Home from "../views/Home.vue";
 // @ts-ignore
 import Profile from "../views/Profile.vue";
 import { authGuard } from "@bcwdev/auth0-vue";
+import BookHome from "../views/BookHome.vue";
+import AuthorHome from "../views/AuthorHome.vue";
 
 Vue.use(VueRouter);
 
@@ -13,6 +15,16 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home
+  },
+  {
+    path: "/books",
+    name: "BookHome",
+    component: BookHome
+  },
+  {
+    path: "/authors",
+    name: "AuthorHome",
+    component: AuthorHome
   },
   {
     path: "/profile",

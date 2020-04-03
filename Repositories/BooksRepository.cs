@@ -77,6 +77,15 @@ namespace library_webapi.Repositories
       return changed == 1;
     }
 
+    internal IEnumerable<Book> GetBooksByAuthId(int Id)
+    {
+      string sql = @"
+            SELECT b.* FROM bookauthors ba
+            INNER JOIN books b ON b.id = ba.bookId
+            WHERE authId = @Id;";
+      return _db.Query<Book>(sql, new { Id });
+    }
+
 
   }//endof class
 }//endof namespace

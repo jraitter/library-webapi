@@ -12,10 +12,13 @@ namespace library_webapi.Controllers
   public class AuthorsController : ControllerBase
   {
     private readonly AuthorService _as;
+    private readonly BookService _bs;
+
     // NOTE Dependency Injection
-    public AuthorsController(AuthorService ass)
+    public AuthorsController(AuthorService ass, BookService bs)
     {
       _as = ass;
+      _bs = bs;
     }
 
     [HttpGet]
@@ -43,6 +46,19 @@ namespace library_webapi.Controllers
         return BadRequest(e.Message);
       }
     }//endof GetByID
+
+    [HttpGet("{authId}/books")]
+    public ActionResult<IEnumerable<Book>> GetBooksByAuthId(int authId)
+    {
+      try
+      {
+        return Ok(_bs.GetBooksByAuthId(authId));
+      }
+      catch (Exception e)
+      {
+        return BadRequest(e.Message);
+      }
+    }//endof
 
     [HttpPost]
     [Authorize]

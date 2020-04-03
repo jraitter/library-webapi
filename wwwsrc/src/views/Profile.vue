@@ -1,18 +1,16 @@
 <template>
-  <div class="about text-center">
-    {{ myBlogs }}
-  </div>
+  <div class="about text-center">{{ authors }}</div>
 </template>
 
 <script>
 export default {
   name: "Profile",
   mounted() {
-    this.$store.dispatch("getMyBlogs");
+    this.$store.dispatch("getAuthors");
   },
   computed: {
-    myBlogs() {
-      return this.$store.state.myBlogs;
+    authors() {
+      return this.$store.state.authors;
     }
   }
 };

@@ -1,8 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <router-link class="navbar-brand" :to="{ name: 'Home' }"
-      >AppName</router-link
-    >
+    <router-link class="navbar-brand" :to="{ name: 'Home' }">AppName</router-link>
     <button
       class="navbar-toggler"
       type="button"
@@ -17,28 +15,24 @@
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item" :class="{ active: $route.name == 'Home' }">
-          <router-link :to="{ name: 'Home' }" class="nav-link"
-            >Home</router-link
-          >
+          <router-link :to="{ name: 'Home' }" class="nav-link">Home</router-link>
+        </li>
+        <li class="nav-item" :class="{ active: $route.name == 'BookHome' }">
+          <router-link :to="{ name: 'BookHome' }" class="nav-link">Books</router-link>
+        </li>
+        <li class="nav-item" :class="{ active: $route.name == 'AuthorHome' }">
+          <router-link :to="{ name: 'AuthorHome' }" class="nav-link">Authors</router-link>
         </li>
         <li
           class="nav-item"
           v-if="$auth.isAuthenticated"
           :class="{ active: $route.name == 'Profile' }"
         >
-          <router-link class="nav-link" :to="{ name: 'Profile' }"
-            >Profile</router-link
-          >
+          <router-link class="nav-link" :to="{ name: 'Profile' }">Profile</router-link>
         </li>
       </ul>
       <span class="navbar-text">
-        <button
-          class="btn btn-success"
-          @click="login"
-          v-if="!$auth.isAuthenticated"
-        >
-          Login
-        </button>
+        <button class="btn btn-success" @click="login" v-if="!$auth.isAuthenticated">Login</button>
         <button class="btn btn-danger" @click="logout" v-else>logout</button>
       </span>
     </div>
