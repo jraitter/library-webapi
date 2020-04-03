@@ -1,20 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <h1>Welcome to Your Vue.js App</h1>
+  <div class="home container-fluid">
+    <div class="row">
+      <div class="col-12 text-right">
+        <button v-if="!bookForm" @click="bookForm = true" class="btn btn-success">Add-Car</button>
+        <button v-else @click="bookForm = false" class="btn btn-danger">cancel</button>
+      </div>
+      <div class="col-12">
+        <create-book v-if="bookForm" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import CreateBook from "@/components/CreateBook";
 export default {
   name: "home",
-  computed: {
-    // books() {
-    //   return this.$store.state.books;
-    // },
-    // authors() {
-    //   return this.$store.state.authors;
-    // }
-  }
+  data() {
+    return {
+      bookForm: false
+    };
+  },
+  components: {
+    CreateBook
+  },
+  computed: {}
 };
 </script>

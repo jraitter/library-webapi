@@ -64,6 +64,18 @@ export default new Vuex.Store({
     async getCurrentBook({ commit }, id) {
       let res = await api.get("authors/" + id + "/books");
       commit("setActiveBook", res.data)
+    },
+    async createBook({ commit, dispatch }, payload) {
+      let bookres = await api.post("books", payload);
+      console.log("book-res", bookres.data);
+
+      let authres = await api.post("authors", payload);
+      console.log("auth-res", authres.data);
+
+
+      let res = await api.post("bookauthors", { bookId: bookres.data.id, authId: authres.data.id });
+      console.log("bookAuthor", res.data);
+
     }
   }
 });
